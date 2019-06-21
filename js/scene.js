@@ -45,11 +45,11 @@ var loader = new THREE.GLTFLoader();
 var meshMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: true});
 
 const studioPosition = new THREE.Vector3(0,-50,0);
-loader.load('max/studio.gltf', gltf => handle_load(gltf, studioPosition, false, scene02));
-loader.load('max/studionogreen.gltf', gltf => handle_load(gltf, studioPosition, false, scene01));
+loader.load('https://luisfranciscooliveira.github.io/max/studio.gltf', gltf => handle_load(gltf, studioPosition, false, scene02));
+loader.load('https://luisfranciscooliveira.github.io/max/studionogreen.gltf', gltf => handle_load(gltf, studioPosition, false, scene01));
 
 const teapotPosition = new THREE.Vector3(0,30,0);
-loader.load('max/teapot.gltf', gltf => handle_load(gltf, teapotPosition, true, scene01));
+loader.load('https://luisfranciscooliveira.github.io/max/teapot.gltf', gltf => handle_load(gltf, teapotPosition, true, scene01));
 
 function handle_load(gltf, position, isTeapot, scene) {
   var scale = 100;
