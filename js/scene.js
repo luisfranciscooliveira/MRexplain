@@ -79,18 +79,6 @@ function resizeCanvasToDisplaySize() {
   }
 }
 
-let geometry0 = new THREE.BoxGeometry(2,2,2);
-geometry0.faces.splice(4, 2); // make hole by removing top two triangles
-
-let material0 = new THREE.MeshBasicMaterial({
-  colorWrite: false
-});
-
-let mesh0 = new THREE.Mesh( geometry0, material0 );
-mesh0.scale.set(10,10,10).multiplyScalar(1.01);
-mesh0.position.y = -1;
-scene01.add(mesh0);	
-
 //frame update
 function animate(time) {
   time *= 0.001;  // seconds
