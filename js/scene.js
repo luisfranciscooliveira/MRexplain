@@ -49,8 +49,7 @@ controls();
 
 function init() {
 
-  container = document.getElementById( 'container' );
-
+  //container = document.getElementById( 'container' );
   //add a camera per view
   for ( var ii = 0; ii < views.length; ++ ii ) {
 
@@ -66,8 +65,9 @@ function init() {
 
   renderer = new THREE.WebGLRenderer( {canvas: document.querySelector("canvas"), antialias: true } );
   renderer.setPixelRatio( window.devicePixelRatio );
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  container.appendChild( renderer.domElement );
+  renderer.setSize( renderer.domElement.clientWidth, renderer.domElement.clientHeight);
+  //container.appendChild( renderer.domElement );
+  //document.body.appendChild( renderer.domElement );
   
 
   setEnvironment(scene01);
@@ -76,17 +76,26 @@ function init() {
 }
 
 function updateSize() {
-
+  /*
   if ( windowWidth != window.innerWidth || windowHeight != window.innerHeight ) {
 
       windowWidth = window.innerWidth;
       windowHeight = window.innerHeight;
 
-      renderer.setSize( windowWidth, windowHeight );
-
+      renderer.setSize(windowWidth, windowHeight);
+      console.log(window.innerHeight);
+      console.log(renderer.domElement.clientWidth);
   }
+  */
+  if (windowWidth !== renderer.domElement.clientWidth || windowHeight !== renderer.domElement.clientHeight) {
 
+    windowWidth = renderer.domElement.clientWidth;
+    windowHeight = renderer.domElement.clientHeight;
+
+    renderer.setSize( windowWidth, windowHeight, false);
+  }
 }
+
 
 function animate() {
 
