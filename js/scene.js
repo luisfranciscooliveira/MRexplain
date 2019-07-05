@@ -7,36 +7,34 @@ scene02 = new THREE.Scene();
 var views = [
   {
       left: 0,
-      bottom: 0,
-      width: 0.5,
-      height: 1.0,
+      bottom: 0.5,
+      width: 1,
+      height: 0.5,
       background: new THREE.Color( 0.5, 0.5, 0.7 ),
       eye: [ 0, 300, 1800 ],
       up: [ 0, 1, 0 ],
       fov: 30,
       sceneCam: scene01,
-      updateCamera: function ( camera, scene, mouseX ) {
+      updateCamera: function ( camera, scene ) {
 
-        camera.position.x += mouseX * 0.05;
-        camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
-        camera.lookAt( scene.position );
+        //camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), - 2000 );
+        //camera.lookAt( scene.position );
 
       }
   },
   {
-      left: 0.5,
+      left: 0,
       bottom: 0,
-      width: 0.5,
-      height: 1,
+      width: 1,
+      height: 0.5,
       background: new THREE.Color( 0.5, 0.7, 0.7 ),
       eye: [ 1400, 800, 1400 ],
       up: [ 0, 1, 0 ],
       fov: 60,
       sceneCam: scene02,
-      updateCamera: function ( camera, scene, mouseX ) {
+      updateCamera: function ( camera, scene ) {
 
-        camera.position.y -= mouseX * 0.05;
-        camera.position.y = Math.max( Math.min( camera.position.y, 1600 ), - 1600 );
+        //camera.position.y = Math.max( Math.min( camera.position.y, 1600 ), - 1600 );
         camera.lookAt( scene.position );
 
       }
@@ -49,26 +47,22 @@ controls();
 
 function init() {
 
-  //container = document.getElementById( 'container' );
-  //add a camera per view
-  for ( var ii = 0; ii < views.length; ++ ii ) {
-
-    var view = views[ ii ];
-    var camera = new THREE.PerspectiveCamera( view.fov, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.fromArray( view.eye );
-    camera.up.fromArray( view.up );
-    view.camera = camera;
-
-  }
-
   scene = new THREE.Scene();
 
   renderer = new THREE.WebGLRenderer( {canvas: document.querySelector("canvas"), antialias: true } );
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( renderer.domElement.clientWidth, renderer.domElement.clientHeight);
-  //container.appendChild( renderer.domElement );
-  //document.body.appendChild( renderer.domElement );
-  
+
+  //add a camera per view
+  for ( var ii = 0; ii < views.length; ++ ii ) {
+
+    var view = views[ ii ];
+    var camera = new THREE.PerspectiveCamera( view.fov, renderer.domElement.clientWidth / renderer.domElement.clientHeight, 1, 10000 );
+    camera.position.fromArray( view.eye );
+    camera.up.fromArray( view.up );
+    view.camera = camera;
+
+  }
 
   setEnvironment(scene01);
   setEnvironment(scene02);
@@ -76,21 +70,13 @@ function init() {
 }
 
 function updateSize() {
-  /*
-  if ( windowWidth != window.innerWidth || windowHeight != window.innerHeight ) {
+  const canvasWidth = renderer.domElement.clientWidth;
+  const canvasHeight = renderer.domElement.clientHeight;
 
-      windowWidth = window.innerWidth;
-      windowHeight = window.innerHeight;
+  if (windowWidth !== canvasWidth || windowHeight !== canvasHeight) {
 
-      renderer.setSize(windowWidth, windowHeight);
-      console.log(window.innerHeight);
-      console.log(renderer.domElement.clientWidth);
-  }
-  */
-  if (windowWidth !== renderer.domElement.clientWidth || windowHeight !== renderer.domElement.clientHeight) {
-
-    windowWidth = renderer.domElement.clientWidth;
-    windowHeight = renderer.domElement.clientHeight;
+    windowWidth = canvasWidth;
+    windowHeight = canvasHeight;
 
     renderer.setSize( windowWidth, windowHeight, false);
   }
@@ -108,7 +94,6 @@ function animate() {
 function render() {
 
   updateSize();
-  //resizeCanvasToDisplaySize();
 
   for ( var ii = 0; ii < views.length; ++ ii ) {
 
@@ -194,19 +179,6 @@ const  camera = new THREE.PerspectiveCamera(30, 2, 1, 2000);
 camera.position.set(500,500,500);
 camera.lookAt(new THREE.Vector3(0,0,0));
 */
-
-//dynamic canvas resize
-function resizeCanvasToDisplaySize() {
-  const canvas = renderer.domElement;
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  if (canvas.width !== width ||canvas.height !== height) {
-    // you must pass false here or three.js sadly fights the browser
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }
-}
 
 /*
 //frame update
