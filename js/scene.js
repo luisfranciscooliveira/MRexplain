@@ -2,6 +2,7 @@
 var container;
 var views, scene, scene01, scene02, renderer;
 var windowWidth, windowHeight;
+var studio;
 scene01 = new THREE.Scene();
 scene02 = new THREE.Scene();
 var views = [
@@ -28,9 +29,9 @@ var views = [
       width: 1,
       height: 0.5,
       background: new THREE.Color( 0.5, 0.7, 0.7 ),
-      eye: [ 1400, 800, 1400 ],
+      eye: [ 0, 20, 300 ],
       up: [ 0, 1, 0 ],
-      fov: 60,
+      fov: 35,
       sceneCam: scene02,
       updateCamera: function ( camera, scene ) {
 
@@ -63,10 +64,11 @@ function init() {
     view.camera = camera;
 
   }
-
+ 
   setEnvironment(scene01);
   setEnvironment(scene02);
   addObjects();
+  
 }
 
 function updateSize() {
@@ -94,7 +96,7 @@ function animate() {
 function render() {
 
   updateSize();
-
+  
   for ( var ii = 0; ii < views.length; ++ ii ) {
 
       var view = views[ ii ];
@@ -136,24 +138,26 @@ function controls() {
 
 function addObjects() {
   var teapot;
+  var manager = new THREE.LoadingManager();
 
   var loader = new THREE.GLTFLoader();
   var meshMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, wireframe: true});
 
   const studioPosition = new THREE.Vector3(0,-50,0);
-  loader.load('https://luisfranciscooliveira.github.io/max/studio.gltf', gltf => handle_load(gltf, studioPosition, false, scene02));
-  loader.load('https://luisfranciscooliveira.github.io/max/studionogreen.gltf', gltf => handle_load(gltf, studioPosition, false, scene01));
+  loader.load('https://luisfranciscooliveira.github.io/max/studio.gltf', gltf => handle_load(gltf, studioPosition, scene02));
+  loader.load('https://luisfranciscooliveira.github.io/max/studionogreen.gltf', gltf => handle_load(gltf, studioPosition, scene01));
 
 
   const teapotPosition = new THREE.Vector3(0,30,0);
-  loader.load('https://luisfranciscooliveira.github.io/max/teapot.gltf', gltf => handle_load(gltf, teapotPosition, true, scene01));
+  loader.load('https://luisfranciscooliveira.github.io/max/teapot.gltf', gltf => handle_load(gltf, teapotPosition, scene01));
  
-  function handle_load(gltf, position, isTeapot, scene) {
+  function handle_load(gltf, position, scene) {
     var scale = 100;
     const object = gltf.scene.children[1];
     object.position.copy(position);
     object.scale.set(scale, scale, scale);
-  
+    scene.add(object);
+  /*
     if(isTeapot == true) {
       teapot = object;
       teapot.material = meshMat;
@@ -161,7 +165,18 @@ function addObjects() {
     } else {
       scene.add(object);
     }
+*/
+    object.traverse( function ( child ) {
+      if (child.name=='teapot') {
+        child.visible = false;
+      }
+    } );
+
+
   }
+  //print the object array of each scene
+  console.log(scene01.children);
+  console.log(scene02.children);
 }
 
 function setEnvironment(scene) {
@@ -196,7 +211,7 @@ requestAnimationFrame(animate);
 function buttonClicked(button) {
   switch(button) {
     case "ar":
-      currentScene = scene01;
+      console.log(scene01.children);
       break;
     case "mixedreality":
       currentScene = scene02;
